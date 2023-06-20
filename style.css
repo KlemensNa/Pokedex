@@ -81,6 +81,19 @@ body{
     height: 5%;
 }
 
+#pokedexText{
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    border-bottom: 6px solid black;
+}
+
+
+#pokedexEntryText{
+    padding: 16px;
+    line-height: 3 ;
+}
+
 
 
 

@@ -2,19 +2,27 @@ async function loadBulbasaur(){
     let url = 'https://pokeapi.co/api/v2/pokemon/bulbasaur';
     let response = await fetch(url);
     let responseAsJson = await response.json();
-    console.log(responseAsJson);
+    console.log(responseAsJson);    
     
-    renderPokemon(responseAsJson);
+
+    let newUrl = 'https://pokeapi.co/api/v2/pokemon-species/1';
+    let newResponse = await fetch(newUrl);
+    let newResponseAsJson = await newResponse.json();
+    
+    console.log(newResponseAsJson);
+    renderPokemon(responseAsJson, newResponseAsJson);
+    
 }
 
 
-function renderPokemon(responseAsJson){
+function renderPokemon(responseAsJson, newResponseAsJson){
     let name = document.getElementById('name');
     let index = document.getElementById('index');
     let picture = document.getElementById('picture');
     let typ = document.getElementById('typ');
     let height = document.getElementById('height');
     let weight = document.getElementById('weight');
+    let pokedexEntryText = document.getElementById('pokedexEntryText');
 
     let convertHeight = (responseAsJson['height']/10);
     let convertWeight = (responseAsJson['weight']/10);
@@ -33,4 +41,7 @@ function renderPokemon(responseAsJson){
     <div>Weight</div>
     <div>${convertWeight} kg</div>
 ` ;
+
+    pokedexEntryText.innerHTML = newResponseAsJson['flavor_text_entries'][1]['flavor_text'] + ' ' +
+    newResponseAsJson['flavor_text_entries'][2]['flavor_text'];
 }
