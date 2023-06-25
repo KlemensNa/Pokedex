@@ -1,16 +1,51 @@
+//render Homescreen
+async function renderHomescreen() {
+    renderFrameworkHomeScreen();
+
+    let pokemonList = document.getElementById('homescreenList');
+
+    //make 15sektions with 10 pokemon and an scrollbutton to scroll to the next side
+    for (let p = 1; p < 151; p++) {
+
+        let url = `https://pokeapi.co/api/v2/pokemon/${p}`;
+        let response = await fetch(url);
+        let responseAsJson = await response.json();
+
+        let pokeName = responseAsJson['name'];
+        let pokeID = responseAsJson['id'];
+
+        pokemonList.innerHTML += /*html*/`
+        <div id="pokemon${p}"  class="listPokemon" onclick="renderInfoBtn(${p})">
+            <div id="homescreenID${p}" class="homescreenID">#${pokeID}</div>
+            <div id="homescreenName${p}">${pokeName}</div>
+        </div>
+        `
+    }
+}
+
+
+async function renderInfoBtn(p) {
+
+    let url = `https://pokeapi.co/api/v2/pokemon/${p}`;
+    let response = await fetch(url);
+    let responseAsJson = await response.json();
+
+    document.getElementById('pokePicture').src = responseAsJson['sprites']['versions']['generation-i']['red-blue']['front_default'];
+    document.getElementById('homescreenPictureText').innerHTML = /*html*/`
+        <div id="infoBtn" class="btn indexBtn" onclick="loadPokedex(${p})">Infos</div>
+    `;
+}
+
+
 async function loadPokedex(pokeID) {
 
     let url = `https://pokeapi.co/api/v2/pokemon/${pokeID}`;
     let response = await fetch(url);
     let responseAsJson = await response.json();
-    console.log(responseAsJson);
-
-
+    
     let newUrl = `https://pokeapi.co/api/v2/pokemon-species/${pokeID}`;
     let newResponse = await fetch(newUrl);
     let newResponseAsJson = await newResponse.json();
-
-    console.log(newResponseAsJson);
 
     renderPageOne(responseAsJson, newResponseAsJson, pokeID);
 
@@ -21,14 +56,17 @@ function renderPageOne(responseAsJson, newResponseAsJson, pokeID) {
     renderFrameworkPageOne();
     renderInfoHeader(responseAsJson);
     renderEntryText(newResponseAsJson);
+    renderBottomButtonsPageOne(pokeID);    
+}
 
-    //render Button
+
+function renderBottomButtonsPageOne(pokeID){
     let pokedexBottomButtons = document.getElementById('pokedexBottomButtons');
 
     pokedexBottomButtons.innerHTML = /*html*/`
         <button id="backToMainBtn" class="btn" onclick="renderHomescreen()">Overview</button>
         <button id="nextSideBtn" class="btn" onclick="renderPageTwo(${pokeID})">NextPage</button>
-    `
+        `
 }
 
 
@@ -105,56 +143,86 @@ function renderEntryText(i) {
 
 // renderSecondPage
 async function renderPageTwo(pokeID) {
+    renderFrameworkPageTwo();
     let url = `https://pokeapi.co/api/v2/pokemon/${pokeID}`;
     let response = await fetch(url);
     let responseAsJson = await response.json();
     console.log(responseAsJson);
 
-    let newUrl = `https://pokeapi.co/api/v2/pokemon-species/${pokeID}`;
-    let newResponse = await fetch(newUrl);
-    let newResponseAsJson = await newResponse.json();
-    console.log(newResponseAsJson)
+    renderInfoHeader(responseAsJson);
+    renderBottomButtonsPageTwo(pokeID);
 
+    
+    //Chart
+    let stats = responseAsJson['stats'];
+    let statName = [];
+    let statValue = [];
 
-}
+    for (let s = 0; s < stats.length; s++) {
+        const element = stats[s];
 
-
-
-
-//render Homescreen
-async function renderHomescreen() {
-    renderFrameworkHomeScreen();
-
-    let pokemonList = document.getElementById('homescreenList');
-
-    //make 15sektions with 10 pokemon and an scrollbutton to scroll to the next side
-    for (let p = 1; p < 151; p++) {
-
-        let url = `https://pokeapi.co/api/v2/pokemon/${p}`;
-        let response = await fetch(url);
-        let responseAsJson = await response.json();
-
-        let pokeName = responseAsJson['name'];
-        let pokeID = responseAsJson['id'];
-
-        pokemonList.innerHTML += /*html*/`
-        <div id="pokemon${p}"  class="listPokemon" onclick="renderInfoBtn(${p})">
-            <div id="homescreenID${p}" class="homescreenID">#${pokeID}</div>
-            <div id="homescreenName${p}">${pokeName}</div>
-        </div>
-        `
-    }
-}
-
-
-async function renderInfoBtn(p) {
-
-    let url = `https://pokeapi.co/api/v2/pokemon/${p}`;
-    let response = await fetch(url);
-    let responseAsJson = await response.json();
-
-    document.getElementById('pokePicture').src = responseAsJson['sprites']['versions']['generation-i']['red-blue']['front_default'];
-    document.getElementById('homescreenPictureText').innerHTML = /*html*/`
-        <div id="infoBtn" class="btn indexBtn" onclick="loadPokedex(${p})">Infos</div>
+        statValue.push(element['base_stat']);
+        statName.push(element['stat']['name']);       
+        
+        document.getElementById('valueContainerTitle').innerHTML += /*html*/`
+            <div id=statName${s}>${element['stat']['name']}</div>
+        `;
+        document.getElementById('valueContainerValue').innerHTML += /*html*/`
+        <div id=statValue${s}>${element['base_stat']}</div>
     `;
+
+    }
+
+
+
+    const ctx = document.getElementById('myChart');
+    console.log(ctx);
+
+    new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: statName,
+        datasets: [{          
+          data: statValue,
+          borderWidth: 1,
+          backgroundColor: 'rgba(0,0,0,0.2)',
+        }]
+      },
+      options: {
+        scales: {
+          r: {
+            beginAtZero: true,
+            max: 160,
+            ticks:{
+                display: false
+            }
+          },
+        },
+        plugins: {
+            legend: {
+              display: false
+            },
+        },
+        elements:{
+            point:{
+                pointStyle: false
+            }
+          }
+
+      }
+    });
+
 }
+
+
+function renderBottomButtonsPageTwo(pokeID){
+    let pokedexBottomButtons = document.getElementById('pokedexBottomButtons');
+
+    pokedexBottomButtons.innerHTML = /*html*/`
+        <button id="perviousSide" class="btn" onclick="renderPageOne(${pokeID})">PreviousPage</button>
+        `
+}
+
+
+
+

@@ -1,4 +1,4 @@
-function renderFrameworkHomeScreen(){
+function renderFrameworkHomeScreen() {
     let pokedex = document.getElementById('pokedexBlueRed');
     pokedex.innerHTML = /*html*/`
         <div id="homescreen" class="pokemon">
@@ -25,7 +25,7 @@ function renderFrameworkHomeScreen(){
 }
 
 
-function renderFrameworkPageOne(){
+function renderFrameworkPageOne() {
     let pokedex = document.getElementById('pokedexBlueRed');
     pokedex.innerHTML = /*html*/`
         <div class="pokemon">
@@ -52,7 +52,7 @@ function renderFrameworkPageOne(){
 }
 
 
-function renderFrameworkPageTwo(){
+function renderFrameworkPageTwo() {
     let pokedex = document.getElementById('pokedexBlueRed');
     pokedex.innerHTML = /*html*/`
         <div class="pokemon">
@@ -69,7 +69,49 @@ function renderFrameworkPageTwo(){
                 </div>
             </div>
             <div id="pokemonData">
-                Hier Daten in Leisten anzeigen
+                <div id="pokeDataTitle">Stats</div>
+                <div id="pokeDataContent">
+                    <div id="chartContainer"><canvas id="myChart"></canvas></div>
+                    <div id="valueContainer">
+                        <div id="valueContainerTitle"></div>
+                        <div id="valueContainerValue"></div>
+                </div>
+            </div>
+                 
+            </div>
+            <div id="pokedexBottomButtons">
+                Hier zurück
+            </div>
+        </div>
+    `;
+}
+
+
+function renderFrameworkPageThree() {
+    let pokedex = document.getElementById('pokedexBlueRed');
+    pokedex.innerHTML = /*html*/`
+        <div class="pokemon">
+            <div id="pokedexTop">
+                <div id="pictureAndId">
+                    <div id="pictureContainer"><img id="picture"></div>
+                    <div id="index"></div>
+                </div>
+                <div id="nameAndStats">
+                    <div id="name"></div>
+                    <div id="typ"></div>
+                    <div id="height"></div>
+                    <div id="weight"></div>
+                </div>
+            </div>
+            <div id="pokemonData">
+                <div id="pokeDataTitle">Stats</div>
+                <div id="pokeDataContent">
+                    <div id="chartContainer"><canvas id="myChart"></canvas></div>
+                    <div id="valueContainer">
+                        <div id="valueContainerTitle"></div>
+                        <div id="valueContainerValue"></div>
+                </div>
+            </div>                 
             </div>
             <div id="pokedexBottomButtons">
                 Hier zurück

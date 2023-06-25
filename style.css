@@ -162,10 +162,6 @@ body{
 
 }
 
-#homescreenName{
-    
-}
-
 #homescreenPicture{
     display:flex;
     width: 40%;
@@ -193,7 +189,46 @@ body{
     align-items: center;
     width: 70%;
     height: 30%;
+}
 
+#pokemonData{
+    flex: 1;
+    border-bottom: 6px solid black;
+    display: flex;
+    flex-direction: column;
+}
+
+#pokeDataContent{
+    display: flex;
+}
+
+#pokeDataTitle{
+    text-align: center;
+}
+
+#valueContainer{
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 12px;
+    width: 50%;
+    height: 100%;
+}
+
+#valueContainerTitle{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#valueContainerValue{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+#chartContainer{
+    width: 50%;
+    height: 100%;
 }
 
 
