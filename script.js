@@ -1,12 +1,14 @@
+let AUDIO_POKEMON = new Audio('audio/pokemonSound.mp3');
+
+
 //render Homescreen
 async function renderHomescreen() {
     renderFrameworkHomeScreen();
-    
 
     let pokemonList = document.getElementById('homescreenList');
 
     //make 15sektions with 10 pokemon and an scrollbutton to scroll to the next side
-    for (let p = 1; p < 151; p++) {
+    for (let p = 1; p < 152; p++) {
 
         let url = `https://pokeapi.co/api/v2/pokemon/${p}`;
         let response = await fetch(url);
@@ -17,8 +19,8 @@ async function renderHomescreen() {
 
         pokemonList.innerHTML += /*html*/`
         <div id="pokemon${p}"  class="listPokemon" onclick="renderInfoBtn(${p})">
-            <div id="homescreenID${p}" class="homescreenID">#${pokeID}</div>
-            <div id="homescreenName${p}">${pokeName}</div>
+            <div id="homescreenID${p}" class="homescreenID table"><p>#${pokeID}</p></div>
+            <div id="homescreenName${p}" class="table"><p>${pokeName}</p></div>
         </div>
         `
         renderLoadingScreen(p);
@@ -31,11 +33,11 @@ function renderLoadingScreen(p){
 
     let loadingScreen = document.getElementById('loadingScreen');
 
-    let progress = p/150*100;
+    let progress = p/151*100;
 
     loadingScreen.innerHTML = /*html*/`    
             <div id="pokeballImg">
-                <img id="pokeball" src="/img/pokeball2.png" alt="">
+                <img id="pokeball" src="img/pokeball2.png" alt="">
             </div>  
             <h1>Pokedex</h1>
             <div id="loadingBar" aria-valuemax="100">
@@ -51,11 +53,12 @@ async function renderInfoBtn(p) {
     let url = `https://pokeapi.co/api/v2/pokemon/${p}`;
     let response = await fetch(url);
     let responseAsJson = await response.json();
+    // AUDIO_POKEMON.play();
 
     document.getElementById('pokePicture').src = responseAsJson['sprites']['versions']['generation-i']['red-blue']['front_default'];
     document.getElementById('homescreenPictureText').innerHTML = /*html*/`
         <div id="infoBtn" class="btn indexBtn" onclick="loadPokedex(${p})">Infos</div>
-    `;
+    `; 
 }
 
 
@@ -69,12 +72,18 @@ async function loadPokedex(pokeID) {
     let newResponse = await fetch(newUrl);
     let newResponseAsJson = await newResponse.json();
 
-    renderPageOne(responseAsJson, newResponseAsJson, pokeID);
+    savePokemonJSON(responseAsJson, newResponseAsJson)
+    
     console.log(newResponseAsJson);
+    renderPageOne(pokeID);
+    
 }
 
 
-function renderPageOne(responseAsJson, newResponseAsJson, pokeID) {
+function renderPageOne(pokeID) {
+    let responseAsJson = JSON.parse(loadPokemonJSONOne());
+    let newResponseAsJson = JSON.parse(loadPokemonJSONTwo());
+    console.log(newResponseAsJson);
     renderFrameworkPageOne();
     renderInfoHeader(responseAsJson);
     renderEntryText(newResponseAsJson);
@@ -239,10 +248,43 @@ function renderBottomButtonsPageTwo(pokeID){
     let pokedexBottomButtons = document.getElementById('pokedexBottomButtons');
 
     pokedexBottomButtons.innerHTML = /*html*/`
-        <button id="perviousSide" class="btn" onclick="renderHomescreen()">PreviousPage</button>
+        <button id="perviousSide" class="btn" onclick="renderPageOne(${pokeID})">PreviousPage</button>
         `
 }
 
 
 
+function searchForPokemon(){
+    let searchPokemon = document.getElementById('searchPokemon').value; 
+    if (searchPokemon < 1 || searchPokemon > 151){
+        alert("Die eingegebene ID muss zwischen 1 und 151 sein")
+    }else{
+        searchPokemonID = "pokemon" + searchPokemon;
+        let element = document.getElementById(searchPokemonID);
+        console.log(element);
+        element.scrollIntoView();
+    }
+    document.getElementById('searchPokemon').value = "";
+}
 
+
+
+
+
+//** save and load current Pokemon in local Storage to load fast wenn click Previous Button */
+
+function savePokemonJSON(responseAsJson, newResponseAsJson) {
+    localStorage.setItem('currentPokemon', JSON.stringify(responseAsJson));
+    localStorage.setItem('currentPokemonTwo', JSON.stringify(newResponseAsJson));
+}
+
+
+function loadPokemonJSONOne() {
+    let responseAsJson = localStorage.getItem('currentPokemon');
+    return responseAsJson;
+}
+
+function loadPokemonJSONTwo() {
+    let newResponseAsJson = localStorage.getItem('currentPokemonTwo');
+    return newResponseAsJson;
+}

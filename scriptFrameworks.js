@@ -7,17 +7,17 @@ function renderFrameworkHomeScreen() {
                 <h2>HEY, I AM YA POKEDEX</h2>
             </div>
             <div id="homescreenSearch">
-                <input type="text" id="searchPokemon" placeholder="Search Pokemon with ID">
-                <button class="btn">Search</button>
+                <input type="number" id="searchPokemon" placeholder="Search Pokemon with ID" min="1" max="150">
+                <button class="btn" onclick="searchForPokemon()">Search</button>
             </div>
             <div id="homescreenMain">
                 <div id="homescreenList">
                 </div>
                 <div id="homescreenPicture">
-                    <img src="./img/trainer.png" id="pokePicture">
+                    <img src="img/trainer.png" id="pokePicture">
                     <div id="homescreenPictureText">
-                        <p>gesehen: 150 Pokemon</p>
-                        <p>gefangen: 150 Pokemon</p>
+                        <div class="seen"><p>gesehen:</p> <p>150 Pokemon</p></div>
+                        <div class="seen"><p>gefangen:</p> <p>150 Pokemon</p></div>
                     </div>
                 </div>
             </div>
