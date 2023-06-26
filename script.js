@@ -1,6 +1,7 @@
 //render Homescreen
 async function renderHomescreen() {
     renderFrameworkHomeScreen();
+    
 
     let pokemonList = document.getElementById('homescreenList');
 
@@ -20,8 +21,29 @@ async function renderHomescreen() {
             <div id="homescreenName${p}">${pokeName}</div>
         </div>
         `
+        renderLoadingScreen(p);
     }
+    document.getElementById('loadingScreen').style = "display:none";
 }
+
+
+function renderLoadingScreen(p){
+
+    let loadingScreen = document.getElementById('loadingScreen');
+
+    let progress = p/150*100;
+
+    loadingScreen.innerHTML = /*html*/`    
+            <div id="pokeballImg">
+                <img id="pokeball" src="/img/pokeball2.png" alt="">
+            </div>  
+            <h1>Pokedex</h1>
+            <div id="loadingBar" aria-valuemax="100">
+                <div id="loadingBarProgress" style="width: ${progress}%"></div>
+            </div>
+            <h3>loading...</h3>
+    `   
+    }
 
 
 async function renderInfoBtn(p) {
@@ -48,7 +70,7 @@ async function loadPokedex(pokeID) {
     let newResponseAsJson = await newResponse.json();
 
     renderPageOne(responseAsJson, newResponseAsJson, pokeID);
-
+    console.log(newResponseAsJson);
 }
 
 
@@ -133,9 +155,8 @@ function renderWeight(i) {
 function renderEntryText(i) {
     let pokedexEntryText = document.getElementById('pokedexEntryText');
     // Text Pokedex
-    let pokedexText = i['flavor_text_entries'][41]['flavor_text'].replace('\f', ' ');
-    // + ' ' +
-    // i['flavor_text_entries'][25]['flavor_text'].replace('\f', ' ');
+    let pokedexText = i['flavor_text_entries'][2]['flavor_text'].replace('\f', ' ');
+    pokedexText = pokedexText.replace('é','e');
 
     pokedexEntryText.innerHTML = pokedexText;
 }
@@ -208,7 +229,6 @@ async function renderPageTwo(pokeID) {
                 pointStyle: false
             }
           }
-
       }
     });
 
@@ -219,7 +239,7 @@ function renderBottomButtonsPageTwo(pokeID){
     let pokedexBottomButtons = document.getElementById('pokedexBottomButtons');
 
     pokedexBottomButtons.innerHTML = /*html*/`
-        <button id="perviousSide" class="btn" onclick="renderPageOne(${pokeID})">PreviousPage</button>
+        <button id="perviousSide" class="btn" onclick="renderHomescreen()">PreviousPage</button>
         `
 }
 

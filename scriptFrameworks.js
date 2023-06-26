@@ -2,11 +2,12 @@ function renderFrameworkHomeScreen() {
     let pokedex = document.getElementById('pokedexBlueRed');
     pokedex.innerHTML = /*html*/`
         <div id="homescreen" class="pokemon">
+            <div id="loadingScreen"></div>
             <div id="homescreenWelcomeText" onclick="renderHomescreen()">
                 <h2>HEY, I AM YA POKEDEX</h2>
             </div>
             <div id="homescreenSearch">
-                <input type="text" id="searchPokemon" placeholder="Search for ya Pokemon">
+                <input type="text" id="searchPokemon" placeholder="Search Pokemon with ID">
                 <button class="btn">Search</button>
             </div>
             <div id="homescreenMain">
